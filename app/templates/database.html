@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <title>База данных</title>
+    <style>
+.buttonR{
+	margin-left:20px;
+
+}
+.buttonRF{
+	float: right;
+
+}
+.buttonL{
+	margin-right:20px;
+
+}
+.buttonLF{
+
+    float: left;
+}
+
+    </style>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css">
+    <!-- стили из bootstrap  -->
+</head>
+<body>
+<!--шапка  -->
+<header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+        <svg class="bi me-2" width="40" height="32">
+            <use xlink:href="#bootstrap"></use>
+        </svg>
+        <span class="fs-4"></span>
+    </a>
+
+    <ul class="nav nav-pills">
+        <li class="nav-item"><a style='margin-right:10px' href="/" class="nav-link active "
+                                aria-current="page">Главная</a></li>
+        <li class="nav-item"><a href="/database" class="nav-link ">База данных</a></li>
+        <li class="nav-item buttonL"><a style='margin-left:10px' href="/insert_db" class="nav-link active">Добавить
+            запись</a></li>
+
+    </ul>
+</header>
+
+<h1> База данных </h1>
+
+<a href="/database/delete_all_texts" class="btn btn-danger buttonR buttonLF" style='margin:25px'>Очистить базу
+    данных</a><br>
+<form action="/database/topic" method="post">
+    <input class="btn btn-success buttonRF" style='margin:0px 20px 150px 0px' type=submit value='Выбрать'
+           name='filter_button'><br>
+    {% from "_form.html" import render_field %}
+    {{ render_field(form3.select , class = 'buttonRF' ,style ='margin:-40px 40px 0px 40px' ) }}
+    <!-- фильтр выбора категории  -->
+
+    <input type=hidden value='{{ render_field(form3.select) }}' name='feedback_button'>
+
+</form> <!-- цикл для отображения всех записей из бд -->
+{% for b in base %}
+<div class="'alert alert-info ">
+    <br> <h4>№{{b.id}}</h4>
+    <h4>Текст:</h4>
+    <p> {{b.texts}}
+    <p>
+    <h4>Категория:</h4>
+    <p>{{b.topics}}</p>
+    <form method=post action="/database">
+        <a href="/database/{{b.id}}" class="btn btn-danger buttonR">Удалить запись</a></form>
+
+</div>
+{% endfor %}
+
+</body>
+</html>
